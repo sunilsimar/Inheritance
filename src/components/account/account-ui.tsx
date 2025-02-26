@@ -1120,7 +1120,7 @@ const checkOwnerDelegations = async (ownerPubkey: PublicKey) => {
                 <div className="max-w-lg"> {/* Added max-width constraint */}
                   <label className="text-xs sm:text-sm font-medium text-gray-300 flex items-center gap-2 mb-2">
                     <Lock className="w-3 h-3 sm:w-4 sm:h-4 text-sky-400" />
-                    Owner's Public Key
+                    Owner&apos;s Public Key
                   </label>
                   <div className="flex gap-2">
                     <input
