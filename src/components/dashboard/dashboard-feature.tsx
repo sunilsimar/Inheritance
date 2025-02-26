@@ -28,23 +28,23 @@ export function LandingPage() {
   const faqs = [
     {
       question: "How does the inheritance system work?",
-      answer: "Our system leverages advanced smart contracts on the Solana blockchain to enable secure, automated transfer of digital assets to designated beneficiaries. The process is triggered after a customizable period of account inactivity, with built-in safeguards and regular check-in mechanisms to ensure complete control over your assets."
+      answer: "Our platform enables you to delegate SPL tokens and Token-2022 tokens (including Wrapped SOL) to designated beneficiaries. You set a time duration and maintain control through regular check-ins. The transfer only occurs if you miss your check-in period."
     },
     {
-      question: "What happens if I forget to check in?",
-      answer: "Our system implements a comprehensive safety protocol. If a check-in is missed, you'll receive multiple notifications through various channels during an extended grace period. This multi-step verification process ensures no accidental transfers while maintaining the security of your inheritance plan."
+      question: "What happens if I miss a check-in?",
+      answer: "If you miss a check-in, you still retain control over your assets during the grace period. You can either perform a check-in to reset the timer or remove the delegation entirely, ensuring complete control over your assets."
     },
     {
-      question: "Can I modify my inheritance plan?",
-      answer: "Yes, you have complete flexibility to modify your inheritance plan at any time while your account is active. This includes updating beneficiaries, adjusting check-in periods, modifying asset allocations, and revoking or creating new inheritance rules. All changes are securely recorded on the blockchain."
+      question: "Can I modify my delegation plan?",
+      answer: "Yes, you have full control over your delegations. You can update beneficiaries, adjust check-in periods, modify token amounts, or remove delegations entirely at any time while your account is active."
     },
     {
-      question: "Is my inheritance plan secure?",
-      answer: "Absolutely. We implement military-grade security measures including multi-signature verification, time-locked smart contracts, and regular security audits. Our smart contracts are built on Solana's secure blockchain, providing unmatched speed and reliability while maintaining the highest security standards."
+      question: "What types of tokens can I delegate?",
+      answer: "Currently, our platform supports all SPL tokens, Token-2022 tokens, and Wrapped SOL. You can create multiple delegations with different tokens and beneficiaries."
     },
     {
-      question: "What types of assets can I include?",
-      answer: "Currently, our platform supports all SPL tokens and Token 2022 tokens in your inheritance plan. We're actively developing support for additional digital assets, NFTs, and cross-chain assets to provide the most comprehensive digital inheritance solution in the crypto space."
+      question: "Is my delegation secure?",
+      answer: "Yes, our smart contracts are built on Solana's secure blockchain. You maintain full control through manual check-ins, and delegations can be removed even after expiry. Beneficiaries can only claim tokens after the set duration has passed."
     }
   ];
 
@@ -70,7 +70,7 @@ export function LandingPage() {
               The Future of Digital Asset Inheritance
             </h1>
             <p className="text-base md:text-lg text-gray-400 mb-8 max-w-xl mx-auto leading-relaxed">
-              Revolutionary blockchain technology ensuring your digital legacy is preserved and transferred securely to the next generation.
+            A secure platform for delegating your Solana tokens with time-based transfer controls, ensuring your digital assets reach their intended beneficiaries.
             </p>
             {/* <div className="flex items-center justify-center gap-4">
               <button className="bg-sky-500 hover:bg-sky-600 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 flex items-center gap-2">
@@ -113,7 +113,7 @@ export function LandingPage() {
                 <Lock className="w-4 h-4 text-sky-400" />
               </h3>
               <p className="text-sm text-gray-400 leading-relaxed">
-                Military-grade encryption and multi-signature smart contracts ensure your assets remain protected.
+              Set up token delegations with customizable time-locks and beneficiary assignments.
               </p>
             </div>
 
@@ -123,10 +123,9 @@ export function LandingPage() {
               </div>
               <h3 className="text-base font-semibold mb-2 flex items-center gap-2">
                 Time-Based Transfer
-                <ArrowRight className="w-4 h-4 text-sky-400" />
               </h3>
               <p className="text-sm text-gray-400 leading-relaxed">
-                Customizable time-locks with automated transfer mechanisms and built-in safety protocols.
+              Maintain control with manual check-ins and flexible duration settings for each delegation.
               </p>
             </div>
 
@@ -139,7 +138,7 @@ export function LandingPage() {
                 <Coins className="w-4 h-4 text-sky-400" />
               </h3>
               <p className="text-sm text-gray-400 leading-relaxed">
-                Complete control over your digital assets with advanced delegation and management features.
+              Delegate SPL tokens, Token-2022 tokens, and Wrapped SOL with full control over your assets.
               </p>
             </div>
           </div>
@@ -159,7 +158,7 @@ export function LandingPage() {
                   <div className="absolute -top-3 left-4 w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center text-sm font-bold">1</div>
                   <h3 className="text-base font-semibold mb-2 mt-2">Set Up Inheritance</h3>
                   <p className="text-sm text-gray-400 leading-relaxed">
-                    Connect your wallet and add beneficiaries with our intuitive setup process.
+                  Connect your wallet and create token delegations with chosen beneficiaries and durations.
                   </p>
                 </div>
               </div>
@@ -169,7 +168,7 @@ export function LandingPage() {
                   <div className="absolute -top-3 left-4 w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center text-sm font-bold">2</div>
                   <h3 className="text-base font-semibold mb-2 mt-2">Regular Check-ins</h3>
                   <p className="text-sm text-gray-400 leading-relaxed">
-                    Maintain asset control with our flexible check-in system and notifications.
+                  Maintain control with regular check-ins or remove delegations at any time.
                   </p>
                 </div>
               </div>
@@ -179,7 +178,7 @@ export function LandingPage() {
                   <div className="absolute -top-3 left-4 w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center text-sm font-bold">3</div>
                   <h3 className="text-base font-semibold mb-2 mt-2">Secure Transfer</h3>
                   <p className="text-sm text-gray-400 leading-relaxed">
-                    Automated, secure transfer of assets when predetermined conditions are met.
+                  Beneficiaries can claim tokens only after the set duration has passed without a check-in.
                   </p>
                 </div>
               </div>
@@ -226,9 +225,9 @@ export function LandingPage() {
             <div className="bg-[#0A0B0F] rounded-xl p-8 border border-gray-800/50 relative overflow-hidden group hover:border-sky-500/50 transition-all duration-300">
               <div className="absolute inset-0 bg-gradient-to-r from-sky-500/10 to-transparent opacity-50 group-hover:opacity-60 transition-opacity"></div>
               <div className="relative text-center">
-                <h2 className="text-2xl font-bold mb-3">Ready to Secure Your Digital Legacy?</h2>
+                <h2 className="text-2xl font-bold mb-3">Ready to Set Up Your Token Delegation?</h2>
                 <p className="text-sm text-gray-400 mb-6 max-w-xl mx-auto leading-relaxed">
-                  Join thousands of users who trust our platform for their digital inheritance needs. Start your journey today.
+                Create secure, time-locked token delegations on Solana with full control over your assets.
                 </p>
                 <div className="flex items-center justify-center gap-4">
                   <button className="bg-sky-500 hover:bg-sky-600 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 flex items-center gap-2"
