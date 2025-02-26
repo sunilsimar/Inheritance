@@ -37,21 +37,18 @@ export function UiLayout({ children, links }: { children: ReactNode; links: { la
     <div className="h-full flex flex-col">
     <div className="navbar backdrop-blur-md border-b border-sky-500/10 bg-black/80 text-neutral-content flex-col md:flex-row space-y-2 md:space-y-0 sticky top-0 z-50">
       <div className="flex-1">
-        <Link className="btn btn-ghost normal-case text-xl" href="/">
-          {/* <img className="h-4 md:h-6" alt="Logo" src="/logo.png" /> */}
-        </Link>
         <ul className="menu menu-horizontal px-1 space-x-2">
           {links.map(({ label, path }) => (
             <li key={path}>
               <Link 
-                className={`px-4 py-2 rounded-lg transition-all duration-200 hover:bg-sky-500/10 ${
-                  pathname.startsWith(path) 
-                    ? 'text-sky-400 bg-sky-500/10' 
-                    : 'text-gray-400 hover:text-sky-400'
-                }`} 
-                href={path}
+          className={`px-4 py-2 rounded-lg transition-all duration-200 hover:bg-sky-500/10 ${
+            pathname.startsWith(path) 
+              ? 'text-sky-400 bg-sky-500/10' 
+              : 'text-gray-400 hover:text-sky-400'
+          }`} 
+          href={path}
               >
-                {label}
+          {label}
               </Link>
             </li>
           ))}

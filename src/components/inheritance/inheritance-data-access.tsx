@@ -34,15 +34,16 @@ export interface DelegationStatus {
 
 export interface DelegationStatusOwner {
   isDelegated: boolean;
-  existingDelegation?: {
+  delegations?: Array<{
     statePda: string;
     amount: number;
     beneficiary: string;
     expiryTime: number;
     timeUntilExpiry: number,
     tokenAccount: PublicKey,
-    mintAccount: PublicKey
-  };
+    mintAccount: PublicKey,
+    isExpired: boolean,
+  }>;
 }
 
 interface UpdateDelegationArgs {
@@ -322,46 +323,117 @@ export function useInheritanceProgram() {
     }
   }
 
-  const checkDelegationStatusByOwner = useCallback(
-    async (ownerAddress: PublicKey): Promise<DelegationStatusOwner> => {
-      try {
-        const states = await program.account.state.all();
-        const currentTime = Math.floor(Date.now() / 1000);
+  // const checkDelegationStatusByOwner = useCallback(
+  //   async (ownerAddress: PublicKey): Promise<DelegationStatusOwner> => {
+  //     try {
+  //       const states = await program.account.state.all();
+  //       const currentTime = Math.floor(Date.now() / 1000);
   
-        const existingState = states.find(
-          (state) => 
-            state.account.owner.toString() === ownerAddress.toString() &&
-            state.account.expiryTime.toNumber() <= currentTime // Check for expired delegations
+  //       const existingState = states.find(
+  //         (state) => 
+  //           state.account.owner.toString() === ownerAddress.toString() &&
+  //           state.account.expiryTime.toNumber() <= currentTime // Check for expired delegations
+  //       );
+
+  //       console.log(existingState)
+  
+  //       if (existingState) {
+  //         const mintAccount = await getMintFromTokenAccount(existingState.account.tokenAccount)
+  //         console.log(mintAccount)
+  //         return {
+  //           isDelegated: true,
+  //           existingDelegation: {
+  //             statePda: existingState.publicKey.toString(),
+  //             amount: existingState.account.delegatedAmount.toNumber(),
+  //             beneficiary: existingState.account.beneficiary.toString(),
+  //             expiryTime: existingState.account.expiryTime.toNumber(),
+  //             timeUntilExpiry: existingState.account.expiryTime.toNumber() - currentTime,
+  //             tokenAccount: existingState.account.tokenAccount,
+  //             mintAccount: mintAccount,
+  //           },
+  //         };
+  //       }
+  
+  //       return { isDelegated: false };
+  //     } catch (error) {
+  //       console.error("Error checking delegation status:", error);
+  //       return { isDelegated: false };
+  //     }
+  //   },
+  //   [program]
+  // );
+  
+
+  // First update the interface to handle multiple delegations
+
+
+// Then update the checkDelegationStatusByOwner function
+const checkDelegationStatusByOwner = useCallback(
+  async (ownerAddress: PublicKey): Promise<DelegationStatusOwner> => {
+    try {
+      const states = await program.account.state.all();
+      const currentTime = Math.floor(Date.now() / 1000);
+
+      // Find all states for this owner
+      const ownerStates = states.filter(
+        (state) => state.account.owner.toString() === ownerAddress.toString()
+      );
+
+      if (ownerStates.length > 0) {
+        // Process all delegations
+        const delegations = await Promise.all(
+          ownerStates.map(async (state) => {
+            const mintAccount = await getMintFromTokenAccount(state.account.tokenAccount);
+            
+            // Check if token account is Token-2022
+            const isToken2022 = await isToken2022Account(connection, state.account.tokenAccount);
+            const tokenProgramId = isToken2022 ? TOKEN_2022_PROGRAM_ID : TOKEN_PROGRAM_ID;
+            
+            const tokenAccountInfo = await getAccount(
+              connection, 
+              state.account.tokenAccount,
+              'confirmed',
+              tokenProgramId
+            );
+            
+            const mint = tokenAccountInfo.mint;
+            const mintInfo = await getMint(
+              connection,
+              mint,
+              'confirmed',
+              tokenProgramId
+            );
+            
+            // Convert amount to proper decimals
+            const tokenAmount = state.account.delegatedAmount.toNumber() / Math.pow(10, mintInfo.decimals);
+
+            return {
+              statePda: state.publicKey.toString(),
+              amount: tokenAmount,
+              beneficiary: state.account.beneficiary.toString(),
+              expiryTime: state.account.expiryTime.toNumber(),
+              timeUntilExpiry: state.account.expiryTime.toNumber() - currentTime,
+              tokenAccount: state.account.tokenAccount,
+              mintAccount: mintAccount,
+              isExpired: state.account.expiryTime.toNumber() <= currentTime
+            };
+          })
         );
 
-        console.log(existingState)
-  
-        if (existingState) {
-          const mintAccount = await getMintFromTokenAccount(existingState.account.tokenAccount)
-          console.log(mintAccount)
-          return {
-            isDelegated: true,
-            existingDelegation: {
-              statePda: existingState.publicKey.toString(),
-              amount: existingState.account.delegatedAmount.toNumber(),
-              beneficiary: existingState.account.beneficiary.toString(),
-              expiryTime: existingState.account.expiryTime.toNumber(),
-              timeUntilExpiry: existingState.account.expiryTime.toNumber() - currentTime,
-              tokenAccount: existingState.account.tokenAccount,
-              mintAccount: mintAccount,
-            },
-          };
-        }
-  
-        return { isDelegated: false };
-      } catch (error) {
-        console.error("Error checking delegation status:", error);
-        return { isDelegated: false };
+        return {
+          isDelegated: true,
+          delegations
+        };
       }
-    },
-    [program]
-  );
-  
+
+      return { isDelegated: false };
+    } catch (error) {
+      console.error("Error checking delegation status:", error);
+      return { isDelegated: false };
+    }
+  },
+  [program, connection]
+);
 
   const updateDelegation = useMutation<string, Error, UpdateDelegationArgs> ({
     mutationKey: ['inheritance', 'update', { cluster }],

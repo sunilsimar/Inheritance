@@ -8,7 +8,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AppModal, ellipsify } from '../ui/ui-layout'
 import { useCluster } from '../cluster/cluster-data-access'
 import { ExplorerLink } from '../cluster/cluster-ui'
-import { ArrowRight, Clock, Wallet, UserPlus, RefreshCw, Coins, Shield, ChevronDown, ChevronUp  } from 'lucide-react';
+import { ArrowRight, Clock, Wallet, UserPlus, RefreshCw, Coins, Shield, ChevronDown, ChevronUp,ChevronLeft, Lock, AlertCircle, Check  } from 'lucide-react';
 import {
   useGetBalance,
   useGetSignatures,
@@ -579,7 +579,7 @@ useEffect(() => {
       setError('');
       checkedTokens.current.clear();
 
-     router.push('/inheritance/details')
+     router.push('/details')
     } catch (error: any) {
       console.error('Error:', error)
       setError(error.message)
@@ -587,50 +587,52 @@ useEffect(() => {
   }
 
 return (
-  <div className="max-w-2xl mx-auto p-6">
-    <div className="card-glow rounded-2xl p-8 space-y-8">
-      <div className="flex items-center justify-between mb-8">
+  <div className="w-full max-w-2xl mx-auto p-4 sm:p-6"> {/* Adjusted padding */}
+    <div className="card-glow rounded-2xl p-4 sm:p-8 space-y-6 sm:space-y-8"> {/* Responsive padding */}
+      {/* Header section */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-8">
         <div className="space-y-1">
-          <h2 className="text-3xl font-bold flex items-center gap-3">
-            <Shield className="w-8 h-8 text-sky-500" />
+          <h2 className="text-2xl sm:text-3xl font-bold flex items-center gap-3">
+            <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-sky-500" />
             <span className="neon-text">Inheritance Vault</span>
           </h2>
-          <p className="text-gray-400">Secure your digital legacy</p>
+          <p className="text-sm sm:text-base text-gray-400">Secure your digital legacy</p>
         </div>
         {delegationStatus?.isDelegated && (
-          <div className="px-4 py-2 bg-sky-500/10 border border-sky-500/20 rounded-full">
-            <span className="text-sky-400 text-sm font-medium">Active Delegation</span>
+          <div className="px-3 py-1 sm:px-4 sm:py-2 bg-sky-500/10 border border-sky-500/20 rounded-full">
+            <span className="text-xs sm:text-sm text-sky-400 font-medium">Active Delegation</span>
           </div>
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid gap-6">
-          {/* Beneficiary Input */}
+      {/* Form section */}
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+        <div className="grid gap-4 sm:gap-6">
+          {/* Beneficiary Input - made responsive */}
           {!delegationStatus?.isDelegated && (
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
-              <UserPlus size={16} className="text-sky-500" />
-              Beneficiary Key
-            </label>
-            <input
-              type="text"
-              className="w-full px-4 py-3 rounded-xl input-dark transition-all duration-200"
-              value={beneficiary}
-              onChange={(e) => setBeneficiary(e.target.value)}
-              placeholder="Enter beneficiary public key"
-            />
-          </div>
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-300 mb-2">
+                <UserPlus size={16} className="text-sky-500" />
+                Beneficiary Key
+              </label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-xl input-dark transition-all duration-200 text-sm sm:text-base"
+                value={beneficiary}
+                onChange={(e) => setBeneficiary(e.target.value)}
+                placeholder="Enter beneficiary public key"
+              />
+            </div>
           )}
 
-          {/* Token Selection */}
+          {/* Token Selection - made responsive */}
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+            <label className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-300 mb-2">
               <Wallet size={16} className="text-sky-500" />
               Select Token
             </label>
             <select 
-              className="w-full px-4 py-3 rounded-xl input-dark transition-all duration-200"
+              className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-xl input-dark transition-all duration-200 text-sm sm:text-base"
               value={selectedToken}
               onChange={handleTokenSelect}
             >
@@ -643,26 +645,26 @@ return (
             </select>
           </div>
 
-          {/* Amount Input */}
+          {/* Amount Input - made responsive */}
           <div className="space-y-2">
             <div className="flex items-center justify-between mb-2">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+              <label className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-300">
                 <ArrowRight size={16} className="text-sky-500" />
                 Amount
               </label>
               {delegationStatus?.isDelegated ? (
-                <span className="text-sm text-sky-400">
+                <span className="text-xs sm:text-sm text-sky-400">
                   Available: {availableBalance}
                 </span>
               ) : (
                 selectedTokenBalance > 0 && (
-                  <span className="text-sm text-sky-400">Balance: {selectedTokenBalance}</span>
+                  <span className="text-xs sm:text-sm text-sky-400">Balance: {selectedTokenBalance}</span>
                 )
               )}
             </div>
             <input
               type="number"
-              className={`w-full px-4 py-3 rounded-xl transition-all duration-200 ${
+              className={`w-full px-3 py-2 sm:px-4 sm:py-3 rounded-xl transition-all duration-200 text-sm sm:text-base ${
                 error ? 'border-red-500/50 bg-red-500/5' : 'input-dark'
               }`}
               value={amount}
@@ -672,28 +674,28 @@ return (
               step="any"
             />
             {error && (
-              <p className="text-sm text-red-400 mt-1">{error}</p>
+              <p className="text-xs sm:text-sm text-red-400 mt-1">{error}</p>
             )}
           </div>
 
-          {/* Duration Input */}
+          {/* Duration Input - made responsive */}
           {!delegationStatus?.isDelegated && (
             <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+              <label className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-300 mb-2">
                 <Clock size={16} className="text-sky-500" />
                 Duration
               </label>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <input
                   type="number"
-                  className="flex-1 px-4 py-3 rounded-xl input-dark transition-all duration-200"
+                  className="w-full sm:flex-1 px-3 py-2 sm:px-4 sm:py-3 rounded-xl input-dark transition-all duration-200 text-sm sm:text-base"
                   value={durationValue}
                   onChange={(e) => setDurationValue(e.target.value)}
                   placeholder="Duration"
                   min="1"
                 />
                 <select 
-                  className="w-32 px-4 py-3 rounded-xl input-dark transition-all duration-200"
+                  className="w-full sm:w-32 px-3 py-2 sm:px-4 sm:py-3 rounded-xl input-dark transition-all duration-200 text-sm sm:text-base"
                   value={durationUnit}
                   onChange={(e) => setDurationUnit(e.target.value as DurationUnit)}
                 >
@@ -702,19 +704,19 @@ return (
                   <option value="months">Months</option>
                 </select>
               </div>
-              <p className="text-sm text-gray-500">
+              <p className="text-xs sm:text-sm text-gray-500">
                 ≈ {convertToSeconds(Number(durationValue), durationUnit)} seconds
               </p>
             </div>
           )}
         </div>
 
-        {/* Delegation Status and Submit Button */}
+        {/* Buttons and Status - made responsive */}
         {delegationStatus?.isDelegated ? (
-          <div className="mt-8 neon-border rounded-xl p-6 space-y-4">
+          <div className="mt-6 sm:mt-8 neon-border rounded-xl p-4 sm:p-6 space-y-4">
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-sky-400">Current Delegation</h3>
-              <div className="grid grid-cols-2 gap-4 text-sm">
+              <h3 className="text-base sm:text-lg font-semibold text-sky-400">Current Delegation</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
                 <div>
                   <p className="text-gray-400">Amount</p>
                   <p className="text-white font-medium">{delegationStatus.existingDelegation?.amount ?? 0}</p>
@@ -727,14 +729,14 @@ return (
             </div>
             <button
               type="submit"
-              className="w-full px-6 py-3 bg-sky-500 hover:bg-sky-600 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-4 py-2 sm:px-6 sm:py-3 bg-sky-500 hover:bg-sky-600 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={!amount || !!error || updateDelegation.isPending}
             >
               {updateDelegation.isPending ? (
-                <RefreshCw size={20} className="animate-spin" />
+                <RefreshCw size={18} className="animate-spin" />
               ) : (
                 <>
-                  <RefreshCw size={20} />
+                  <RefreshCw size={18} />
                   Update Delegation
                 </>
               )}
@@ -743,26 +745,24 @@ return (
         ) : (
           <button
             type="submit"
-            className="w-full mt-8 px-6 py-3 bg-sky-500 hover:bg-sky-600 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full mt-6 sm:mt-8 px-4 py-2 sm:px-6 sm:py-3 bg-sky-500 hover:bg-sky-600 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!selectedToken || !amount || !!error || initializeState.isPending}
           >
             {initializeState.isPending ? (
-              <RefreshCw size={20} className="animate-spin" />
+              <RefreshCw size={18} className="animate-spin" />
             ) : (
               <>
-                <UserPlus size={20} />
+                <UserPlus size={18} />
                 Create New Delegation
               </>
             )}
           </button>
         )}
       </form>
-
-      {/* <InheritanceDetails /> */}
-      <ClaimInheritance />
     </div>
   </div>
 );
+
 }
 
 const DECIMALS = 9;
@@ -868,33 +868,35 @@ const toggleDetails = (stateKey: string) => {
 };
 
 return (
-  <div className="grid grid-cols-1 gap-4 max-w-3xl mx-auto">
+  <div className="grid grid-cols-1 gap-4 max-w-3xl mx-auto p-4">
     {states.map((state) => (
-      <div key={state.publicKey} className="bg-[#0A0B0F] rounded-2xl p-6 border border-gray-800">
-        <div className="flex items-start justify-between mb-4">
+      <div key={state.publicKey} className="bg-[#0A0B0F] rounded-2xl p-4 sm:p-6 border border-gray-800">
+        {/* Main Info Section */}
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-4 gap-4 sm:gap-0">
           <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="text-sm text-gray-400">To</div>
+            <div className="flex flex-wrap items-center gap-2 mb-1">
+              <div className="text-xs sm:text-sm text-gray-400">To</div>
               <ExplorerLink 
                 label={ellipsify(state.account.beneficiary)} 
                 path={`account/${state.account.beneficiary}`}
-                className="text-sky-400 hover:text-sky-300 transition-colors"
+                className="text-sky-400 hover:text-sky-300 transition-colors text-xs sm:text-sm"
               />
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-semibold text-white">{state.account.amount}</span>
-              <span className="text-sm text-gray-400">Tokens</span>
+              <span className="text-xl sm:text-2xl font-semibold text-white">{state.account.amount}</span>
+              <span className="text-xs sm:text-sm text-gray-400">Tokens</span>
             </div>
           </div>
           
-          <div className="flex flex-col items-end gap-2">
-            <div className={`px-3 py-1 rounded-full text-xs font-medium 
+          {/* Status Badges */}
+          <div className="flex flex-row sm:flex-col items-center sm:items-end gap-2">
+            <div className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap
               ${state.account.currentBalance >= state.account.amount 
                 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
                 : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
               {state.account.currentBalance >= state.account.amount ? 'Sufficient Balance' : 'Insufficient Balance'}
             </div>
-            <div className={`px-3 py-1 rounded-full text-xs font-medium
+            <div className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap
               ${state.account.timeUntilExpiry > 0 
                 ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20' 
                 : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
@@ -903,7 +905,8 @@ return (
           </div>
         </div>
 
-        <div className="flex items-center gap-4 mb-4 text-sm text-gray-400">
+        {/* Info Pills */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 mb-4 text-xs sm:text-sm text-gray-400">
           <div className="flex items-center gap-1">
             <Clock size={14} />
             {state.account.timeUntilExpiry > 0 ? (
@@ -923,7 +926,7 @@ return (
         {/* Expanded Details */}
         {expandedStates[state.publicKey.toString()] && (
           <div className="mt-4 pt-4 border-t border-gray-800 space-y-3">
-            <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
               <div>
                 <div className="text-gray-400 mb-1">State Account</div>
                 <ExplorerLink 
@@ -950,10 +953,11 @@ return (
               </div>
             </div>
 
+            {/* Warning Message */}
             {state.account.currentBalance < state.account.amount && (
-              <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
-                <div className="font-medium text-red-400 mb-1">Inheritance Transfer at Risk!</div>
-                <div className="text-sm text-gray-400">
+              <div className="mt-4 p-3 sm:p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
+                <div className="font-medium text-red-400 mb-1 text-sm">Inheritance Transfer at Risk!</div>
+                <div className="text-xs sm:text-sm text-gray-400">
                   Current balance ({state.account.currentBalance} Tokens) is insufficient for the delegated amount {state.account.amount} Tokens. 
                   The inheritance transfer will fail unless the balance is restored.
                 </div>
@@ -962,37 +966,39 @@ return (
           </div>
         )}
 
+        {/* Action Buttons */}
         {publicKey?.toString() === state.account.owner && (
-          <div className="flex gap-2 mt-4 pt-4 border-t border-gray-800">
+          <div className="flex flex-col sm:flex-row gap-2 mt-4 pt-4 border-t border-gray-800">
             {state.account.timeUntilExpiry > 0 && (
+              <button
+                className="flex items-center justify-center gap-2 flex-1 px-3 sm:px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-xl text-xs sm:text-sm font-medium transition-colors"
+                onClick={() => ManualCheckIn(state)}
+                disabled={checkinLoadingStates[state.publicKey.toString()]}
+              >
+                {checkinLoadingStates[state.publicKey.toString()] ? (
+                  <RefreshCw size={14} className="animate-spin" />
+                ) : (
+                  'Check In'
+                )}
+              </button>
+            )}
             <button
-              className="flex items-center justify-center gap-2 flex-1 px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-xl text-sm font-medium transition-colors"
-              onClick={() => ManualCheckIn(state)}
-              disabled={checkinLoadingStates[state.publicKey.toString()]}
+              className="flex items-center justify-center gap-2 flex-1 px-3 sm:px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-xs sm:text-sm font-medium transition-colors"
+              onClick={() => RevokeDelegation(state)}
+              disabled={loadingStates[state.publicKey.toString()]}
             >
-              {checkinLoadingStates[state.publicKey.toString()] ? (
+              {loadingStates[state.publicKey.toString()] ? (
                 <RefreshCw size={14} className="animate-spin" />
               ) : (
-                'Check In'
+                'Remove Delegation'
               )}
             </button>
-          )}
-          <button
-            className="flex items-center justify-center gap-2 flex-1 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-medium transition-colors"
-            onClick={() => RevokeDelegation(state)}
-            disabled={loadingStates[state.publicKey.toString()]}
-          >
-            {loadingStates[state.publicKey.toString()] ? (
-              <RefreshCw size={14} className="animate-spin" />
-            ) : (
-              'Remove Delegation'
-            )}
-          </button>
           </div>
         )}
 
+        {/* Details Toggle Button */}
         <button 
-          className="flex items-center justify-center gap-1 w-full mt-3 text-sm text-gray-400 hover:text-white transition-colors"
+          className="flex items-center justify-center gap-1 w-full mt-3 text-xs sm:text-sm text-gray-400 hover:text-white transition-colors"
           onClick={() => toggleDetails(state.publicKey.toString())}
         >
           {expandedStates[state.publicKey.toString()] ? (
@@ -1015,110 +1021,266 @@ return (
 
 
 export function ClaimInheritance() {
+  const router = useRouter();
   const { publicKey } = useWallet();
   const [ownerAddress, setOwnerAddress] = useState('');
   const [error, setError] = useState('');
   const { executeTransfer, checkDelegationStatusByOwner } = useInheritanceProgram();
   const [loading, setLoading] = useState(false);
+  const [ownerDelegations, setOwnerDelegations] = useState<any[]>([]);
+  const [isCheckingDelegations, setIsCheckingDelegations] = useState(false);
+  const [claimingDelegation, setClaimingDelegation] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string>('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+// Add a new function to check delegations
+const checkOwnerDelegations = async (ownerPubkey: PublicKey) => {
+  try {
+    setIsCheckingDelegations(true);
+    const status = await checkDelegationStatusByOwner(ownerPubkey);
+    if (status?.delegations?.length) {
+      setOwnerDelegations(status.delegations);
+    } else {
+      setOwnerDelegations([]);
+    }
+  } catch (error) {
+    console.error('Error checking delegations:', error);
+  } finally {
+    setIsCheckingDelegations(false);
+  }
+};
+  
+  const handleClaimDelegation = async (delegation: any) => {
     if (!publicKey) return;
-
+  
     try {
       setLoading(true);
       setError('');
-
-      // Validate owner address
-      let ownerPubkey: PublicKey;
-      try {
-        ownerPubkey = new PublicKey(ownerAddress);
-      } catch {
-        setError('Invalid owner address');
-        return;
-      }
-
-      // Check if there's an expired delegation
-      const status = await checkDelegationStatusByOwner(ownerPubkey);
-      
-      if (!status?.isDelegated) {
-        setError('No delegation found for this owner');
-        return;
-      }
-
-      if (status.existingDelegation?.timeUntilExpiry && status.existingDelegation.timeUntilExpiry > 0) {
-        setError('Delegation has not expired yet');
-        return;
-      }
-
-
-      console.log('token account:', status.existingDelegation?.tokenAccount.toBase58())
-
-      if (status.existingDelegation?.tokenAccount instanceof PublicKey) {
-        console.log('Token Account:', status.existingDelegation.tokenAccount.toBase58());
-      } else {
-        console.log('Raw Token Account:', status.existingDelegation?.tokenAccount);
-        // Convert to PublicKey if it's a string
-        const tokenAccountPubkey = status.existingDelegation?.tokenAccount ? new PublicKey(status.existingDelegation.tokenAccount) : null;
-        if (tokenAccountPubkey) {
-          console.log('Converted Token Account:', tokenAccountPubkey.toBase58());
-        } else {
-          console.log('Token Account is null');
-        }
-      }
-      
-
+      setSuccessMessage('');
+  
+      const ownerPubkey = new PublicKey(ownerAddress);
+  
       await executeTransfer.mutateAsync({
         owner: ownerPubkey,
-        //@ts-ignore
-        userTokenAta: status.existingDelegation?.tokenAccount,
+        userTokenAta: new PublicKey(delegation.tokenAccount),
         beneficiary: publicKey,
-        mint: status.existingDelegation?.mintAccount!,
+        mint: new PublicKey(delegation.mintAccount),
       });
-
-      setOwnerAddress('');
-      // Show success message or handle UI updates
+  
+      // Update the UI by removing the claimed delegation
+      setOwnerDelegations(prevDelegations => 
+        prevDelegations.filter(d => d.tokenAccount !== delegation.tokenAccount)
+      );
+  
+      // Show success notification
+      setSuccessMessage('Successfully claimed inheritance!');
     } catch (err: any) {
-      console.error('Error claiming inheritance:', err);
-      setError(err.message);
+      console.error('Error claiming delegation:', err);
+      setError(err.message || 'Failed to claim delegation');
     } finally {
       setLoading(false);
+      setClaimingDelegation(null);
     }
   };
-
+  
   return (
-    <div className="card bg-base-200 shadow-xl">
-      <div className="card-body">
-        <h2 className="card-title">Claim Inheritance</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="label">
-              <span className="label-text">Owner&apos;s Public Key</span>
-            </label>
-            <input
-              type="text"
-              className={`input input-bordered w-full ${error ? 'input-error' : ''}`}
-              value={ownerAddress}
-              onChange={(e) => setOwnerAddress(e.target.value)}
-              placeholder="Enter owner's public key"
-              disabled={loading}
-            />
-            {error && <div className="text-error text-sm mt-1">{error}</div>}
+    <div className="min-h-screen bg-black text-white">
+      <div className="relative overflow-hidden">
+        {/* Enhanced Background Gradients */}
+        <div className="absolute inset-0 bg-black">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-sky-500/10 blur-[120px] rounded-full"></div>
+          <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-sky-500/5 blur-[120px] rounded-full"></div>
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-sky-600/5 blur-[100px] rounded-full"></div>
+        </div>
+
+        <div className="relative max-w-5xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+          {/* Navigation */}
+          <nav className="mb-12">
+            <button 
+              onClick={() => router.push('/inheritance')} 
+              className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Back to Dashboard
+            </button>
+          </nav>
+
+          <div className="grid md:grid-cols-2 gap-12">
+            {/* Main Content */}
+            <div>
+              <div className="text-left mb-8">
+                <h1 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-sky-400 via-sky-500 to-sky-600 bg-clip-text text-transparent tracking-tight">
+                  Claim Your Inheritance
+                </h1>
+                <p className="text-base md:text-lg text-gray-400 leading-relaxed">
+                  Complete the verification process to claim your inherited digital assets securely on the Solana blockchain.
+                </p>
+              </div>
+            <div className="bg-[#0A0B0F] rounded-xl p-4 sm:p-6 border border-gray-800/50 hover:border-sky-500/50 transition-all duration-300">
+              <div className="space-y-4">
+                <div className="max-w-lg"> {/* Added max-width constraint */}
+                  <label className="text-xs sm:text-sm font-medium text-gray-300 flex items-center gap-2 mb-2">
+                    <Lock className="w-3 h-3 sm:w-4 sm:h-4 text-sky-400" />
+                    Owner's Public Key
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      className="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm rounded-xl bg-gray-900/50 border border-gray-800 focus:border-sky-500/50 transition-all duration-200"
+                      value={ownerAddress}
+                      onChange={(e) => setOwnerAddress(e.target.value)}
+                      placeholder="Enter owner's public key"
+                      disabled={loading || isCheckingDelegations}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        try {
+                          const ownerPubkey = new PublicKey(ownerAddress);
+                          checkOwnerDelegations(ownerPubkey);
+                        } catch {
+                          setError('Invalid owner address');
+                        }
+                      }}
+                      disabled={!ownerAddress || isCheckingDelegations}
+                      className="px-3 py-2 sm:px-4 sm:py-2.5 bg-sky-500 hover:bg-sky-600 rounded-xl font-medium transition-all duration-200 disabled:opacity-50 whitespace-nowrap text-xs sm:text-sm"
+                    >
+                      {isCheckingDelegations ? (
+                        <RefreshCw size={14} className="animate-spin" />
+                      ) : (
+                        'Check'
+                      )}
+                    </button>
+                  </div>
+                    {error && (
+                      <div className="flex items-center gap-2 text-red-400 text-sm mt-2">
+                        <AlertCircle className="w-4 h-4" />
+                        <span>{error}</span>
+                      </div>
+                    )}
+                      {successMessage && (
+                    <div className="flex items-center gap-2 text-emerald-400 text-sm mt-2">
+                      <Check className="w-4 h-4" />
+                      <span>{successMessage}</span>
+                    </div>
+                  )}
+                  </div>
+
+                  {ownerDelegations.length > 0 && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-medium text-gray-200">Available Delegations</h3>
+                      <div className="space-y-3">
+                        {ownerDelegations.map((delegation, index) => (
+                          <div
+                            key={index}
+                            className="p-4 rounded-xl bg-gray-900/50 border border-gray-800 hover:border-sky-500/50 transition-all"
+                          >
+                            <div className="flex items-center justify-between mb-3">
+                              <span className="text-sm font-medium text-gray-300">
+                                Amount: {delegation.amount} Tokens
+                              </span>
+                              <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                delegation.timeUntilExpiry > 0
+                                  ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20'
+                                  : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                              }`}>
+                                {delegation.timeUntilExpiry > 0 
+                                  ? `Expires in ${Math.floor(delegation.timeUntilExpiry / 60)} minutes`
+                                  : 'Ready to Claim'
+                                }
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => {
+                                setClaimingDelegation(delegation.tokenAccount);
+                                handleClaimDelegation(delegation);
+                              }}
+                              disabled={delegation.timeUntilExpiry > 0 || claimingDelegation === delegation.tokenAccount}
+                              className="w-full px-4 py-2 bg-sky-500 hover:bg-sky-600 disabled:bg-gray-700 rounded-lg text-sm font-medium transition-all duration-200"
+                            >
+                              {claimingDelegation === delegation.tokenAccount ? (
+                                <div className="flex items-center justify-center gap-2">
+                                  <RefreshCw size={14} className="animate-spin" />
+                                  <span>Processing...</span>
+                                </div>
+                              ) : (
+                                'Claim Delegation'
+                              )}
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Info Cards */}
+            <div className="space-y-6">
+              <div className="bg-[#0A0B0F] rounded-xl p-6 border border-gray-800/50 hover:border-sky-500/50 transition-all duration-300">
+                <div className="w-10 h-10 bg-sky-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <Shield className="w-5 h-5 text-sky-400" />
+                </div>
+                <h3 className="text-base font-semibold mb-2">Security Measures</h3>
+                <ul className="space-y-3 text-sm text-gray-400">
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-sky-400 rounded-full"></div>
+                    Multi-signature verification
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-sky-400 rounded-full"></div>
+                    48-hour security timelock
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-sky-400 rounded-full"></div>
+                    Automated fraud detection
+                  </li>
+                </ul>
+              </div>
+
+              <div className="bg-[#0A0B0F] rounded-xl p-6 border border-gray-800/50 hover:border-sky-500/50 transition-all duration-300">
+                <div className="w-10 h-10 bg-sky-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <Clock className="w-5 h-5 text-sky-400" />
+                </div>
+                <h3 className="text-base font-semibold mb-2">Transaction Details</h3>
+                <div className="space-y-3 text-sm text-gray-400">
+                  <div className="flex justify-between items-center">
+                    <span>Processing Time</span>
+                    <span className="text-white">~30 seconds</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Network Fee</span>
+                    <span className="text-white">0.001 SOL</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Security Deposit</span>
+                    <span className="text-white">None required</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <button
-            type="submit"
-            className="btn btn-primary w-full"
-            disabled={!ownerAddress || loading}
-          >
-            {loading ? (
-              <span className="loading loading-spinner"></span>
-            ) : (
-              'Claim Tokens'
-            )}
-          </button>
-        </form>
+          {/* Footer */}
+          <footer className="mt-24 pt-6 border-t border-gray-800/50">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-400">Proudly built on Solana</span>
+              </div>
+                <div className="flex gap-4 text-gray-400">
+                {/* <a href="#" className="text-xs hover:text-sky-400 transition-colors">Terms</a>
+                <a href="#" className="text-xs hover:text-sky-400 transition-colors">Privacy</a>
+                <a href="#" className="text-xs hover:text-sky-400 transition-colors">Documentation</a>
+                <a href="#" className="text-xs hover:text-sky-400 transition-colors">Security</a>
+                <a href="#" className="text-xs hover:text-sky-400 transition-colors">Contact</a> */}
+                <a href="https://github.com/sunilsimar/inheritance" className="text-xs hover:text-sky-400 transition-colors">GitHub</a>
+                </div>
+            </div>
+          </footer>
+        </div>
       </div>
     </div>
   );
+
+
 }

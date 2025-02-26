@@ -247,11 +247,13 @@ export function LandingPage() {
                 <span className="text-xs text-gray-400">Proudly Built on Solana</span>
               </div>
               <div className="flex gap-4 text-gray-400">
-                <a href="#" className="text-xs hover:text-sky-400 transition-colors">Terms</a>
+                {/* <a href="#" className="text-xs hover:text-sky-400 transition-colors">Terms</a>
                 <a href="#" className="text-xs hover:text-sky-400 transition-colors">Privacy</a>
                 <a href="#" className="text-xs hover:text-sky-400 transition-colors">Documentation</a>
                 <a href="#" className="text-xs hover:text-sky-400 transition-colors">Security</a>
-                <a href="#" className="text-xs hover:text-sky-400 transition-colors">Contact</a>
+                <a href="#" className="text-xs hover:text-sky-400 transition-colors">Contact</a> */}
+                <a href="https://github.com/sunilsimar/inheritance" className="text-xs hover:text-sky-400 transition-colors">GitHub</a>
+
               </div>
             </div>
             <div className="mt-4 text-center text-xs text-gray-500">

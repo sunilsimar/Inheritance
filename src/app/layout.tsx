@@ -10,10 +10,12 @@ export const metadata = {
 }
 
 const links: { label: string; path: string }[] = [
+  {label: 'Home', path: '/'},
   // { label: 'Account', path: '/account' },
   // { label: 'Clusters', path: '/clusters' },
-  { label: 'Inheritance', path: '/inheritance' },
-  {label: 'Details', path: 'inheritance/details'},
+  { label: 'Create Plan', path: '/inheritance' },
+  {label: 'My Inheritance', path: '/details'},
+  {label: 'Claim', path: '/claim'}
   // {label: 'Claim', path: '/claim'}
 ]
 
