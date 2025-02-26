@@ -63,7 +63,7 @@ export function LandingPage() {
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-6">
               <span className="px-3 py-1 text-xs font-medium bg-sky-500/10 text-sky-400 rounded-full border border-sky-500/20">
-                Powered by Solana
+                Built on Solana
               </span>
             </div>
             <h1 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-sky-400 via-sky-500 to-sky-600 bg-clip-text text-transparent tracking-tight">
