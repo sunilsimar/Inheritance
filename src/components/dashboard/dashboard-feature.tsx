@@ -44,7 +44,7 @@ export function LandingPage() {
     },
     {
       question: "Is my delegation secure?",
-      answer: "Yes, our smart contracts are built on Solana's secure blockchain. You maintain full control through manual check-ins, and delegations can be removed even after expiry. Beneficiaries can only claim tokens after the set duration has passed."
+      answer: "Yes, our Programs(Smart Contracts) are built on Solana's secure blockchain. You maintain full control through manual check-ins, and delegations can be removed even after expiry. Beneficiaries can only claim tokens after the set duration has passed."
     }
   ];
 
